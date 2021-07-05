@@ -1,0 +1,23 @@
+{
+  "name": "activity-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hdarparish/activity-monitor.git"
+  },
+  "author": "hdarparish",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hdarparish/activity-monitor/issues"
+  },
+  "homepage": "https://github.com/hdarparish/activity-monitor#readme",
+  "devDependencies": {
+    "electron": "^13.1.5"
+  }
+}
