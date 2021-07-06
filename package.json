@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
+    "dev": "nodemon --exec electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/hdarparish/activity-monitor#readme",
   "devDependencies": {
-    "electron": "^13.1.5"
+    "electron": "^13.1.5",
+    "nodemon": "^2.0.9"
   }
 }
