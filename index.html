@@ -21,32 +21,50 @@
     <title>Activity Monitor</title>
   </head>
   <body class="container">
-    <h1>CPU Usage</h1>
-    <div class="d-flex flex-column justify-content-center align-items-center">
-      <div>
-        <p id="cpu-header"></p>
+    <div class="d-flex flex-row justify-content-center align-items-center">
+      <div class="cpu flex-grow-1 text-center">
+        <div class="mt-1">
+          <h3>CPU Usage</h3>
+          <h4 id="cpu-header" class="text-center"></h4>
+        </div>
+        <div class="progress m-auto" style="width: 50%">
+          <div
+            class="progress-bar progress-bar-striped progress-bar-animated"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            id="cpu-progress"
+          ></div>
+        </div>
       </div>
-      <div class="progress" style="width: 50%">
-        <div
-          class="progress-bar progress-bar-striped progress-bar-animated"
-          role="progressbar"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          id="cpu-progress"
-        ></div>
+      <div class="memory flex-grow-1 text-center">
+        <div class="mt-1">
+          <h3>Memory Usage</h3>
+          <h4 id="memory-header" class="text-center"></h4>
+        </div>
+        <div class="progress m-auto" style="width: 50%">
+          <div
+            class="progress-bar progress-bar-striped progress-bar-animated"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="10"
+            id="memory-progress"
+          ></div>
+        </div>
       </div>
-      <div>
-        <p id="memory-header"></p>
-      </div>
-      <div class="progress" style="width: 50%">
-        <div
-          class="progress-bar progress-bar-striped progress-bar-animated"
-          role="progressbar"
-          aria-valuemin="0"
-          aria-valuemax="10"
-          id="memory-progress"
-        ></div>
-      </div>
+    </div>
+    <div>
+      <h3>Processes</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Process ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Memory</th>
+          </tr>
+        </thead>
+        <tbody id="tData"></tbody>
+      </table>
     </div>
 
     <!-- You can also require other files to run in this process -->

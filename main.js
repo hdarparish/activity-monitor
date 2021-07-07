@@ -1,11 +1,41 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, getCPUUsage, ipcMain } = require("electron");
+const tasklist = require("tasklist");
+const si = require("systeminformation");
 const path = require("path");
+const { ipcRenderer } = require("electron/renderer");
 
-ipcMain.on("get-cpu-status", (e) => {
-  let cpuUsage = process.getCPUUsage();
-  let memoryUsage = process.getSystemMemoryInfo();
-  e.sender.send("cpu-status-success", { cpuUsage, memoryUsage });
+(async () => {
+  /*
+  [{
+      imageName: 'taskhostex.exe',
+      pid: 1820,
+      sessionName: 'Console',
+      sessionNumber: 1,
+      memUsage: 4415488
+  }, …]
+  */
+})();
+/* si.cpu()
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error)); */
+
+ipcMain.on("get-cpu-status", async (e) => {
+  // let memoryUsage = process.getSystemMemoryInfo();
+  let memoryUsage = await si.mem();
+  let cpuUsage = await si.currentLoad();
+  let cpuTemperature = await si.cpuTemperature();
+
+  e.sender.send("cpu-status-success", {
+    cpuUsage,
+    memoryUsage,
+    cpuTemperature,
+  });
+});
+
+ipcMain.on("get-processes-list", async (e) => {
+  let data = await tasklist();
+  e.sender.send("processes-list-success", data);
 });
 
 function createWindow() {
