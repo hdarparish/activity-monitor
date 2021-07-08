@@ -1,0 +1,30 @@
+#container {
+  margin: 20px;
+  width: 200px;
+  height: 100px;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  background-color: #edf2f4;
+  min-height: 100vh;
+}
+.container .chart-container {
+  padding: 10px;
+}
+.container .chart-container .back {
+  stroke: #8d99ae;
+  stroke-width: 10;
+}
+.container .chart-container .front {
+  stroke: #08415c;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 395.84;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.container .chart-container .text {
+  font-size: 32px;
+  fill: #063045;
+}

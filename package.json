@@ -23,6 +23,7 @@
     "nodemon": "^2.0.9"
   },
   "dependencies": {
+    "progressbar.js": "^1.1.0",
     "systeminformation": "^5.7.7",
     "tasklist": "^4.0.1"
   }

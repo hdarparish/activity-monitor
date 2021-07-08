@@ -1,4 +1,5 @@
 const { ipcRenderer } = require("electron");
+const ProgressBar = require("progressbar.js");
 
 const cpuProgress = document.getElementById("cpu-progress");
 const cpuHeader = document.getElementById("cpu-header");
@@ -14,6 +15,38 @@ const CLICK_MESSAGE = "Notification clicked";
 new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY }).onclick =
   () => console.log(CLICK_MESSAGE);
  */
+
+/* const cpuBar = new ProgressBar.SemiCircle("#cpu-container", {
+  strokeWidth: 6,
+  color: "#FFEA82",
+  trailColor: "#eee",
+  trailWidth: 1,
+  easing: "easeInOut",
+  svgStyle: null,
+  text: {
+    value: "",
+    alignToBottom: false,
+  },
+  from: { color: "#30a1c4" },
+  to: { color: "#e62910" },
+  // Set default step function for all animate calls
+  step: (state, cpuBar) => {
+    cpuBar.path.setAttribute("stroke", state.color);
+    let value = Math.round(cpuBar.value() * 100);
+    if (value === 0) {
+      cpuBar.setText("");
+    } else {
+      cpuBar.setText(`${value}%`);
+    }
+
+    cpuBar.text.style.color = state.color;
+  },
+});
+cpuBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+cpuBar.text.style.fontSize = "2rem"; */
+
+//bar.animate(1.0);
+
 //update the cpu status every 1 second
 setInterval((e) => {
   ipcRenderer.send("get-status");
@@ -36,7 +69,7 @@ const updateProcessList = (processList) => {
 
 const updateCpu = (cpuUsage) => {
   let cpu = Math.round(cpuUsage.currentLoad);
-
+  //console.log(cpu);
   //change the progress bar colour
   if (cpu > 85) {
     cpuProgress.classList.add("bg-danger");
@@ -47,22 +80,22 @@ const updateCpu = (cpuUsage) => {
   }
 
   cpuProgress.style.width = `${cpu}%`;
-  cpuHeader.innerText = `${cpu}%`;
+  cpuHeader.innerText = `Load ${cpu}%`;
+  // Number from 0.0 to 1.0
+  //cpuBar.animate(cpu / 100);
 };
 
 const updateMemory = (memoryUsage) => {
-  let memoryUsed = Math.round((memoryUsage.used / memoryUsage.total) * 100);
+  let memoryUsed = Math.round(memoryUsage.used / memoryUsage.total);
 
-  memoryProgress.style.width = `${memoryUsed}%`;
-  memoryHeader.innerText = `${memoryUsed}%`;
+  memoryProgress.style.width = `${memoryUsed * 100}%`;
+  memoryHeader.innerText = `Load ${memoryUsed * 100}%`;
 };
 
 ipcRenderer.on("status-success", (e, data) => {
-  console.log(data.cpuDetails);
-
   updateCpu(data.cpuUsage);
   updateMemory(data.memoryUsage);
-  updateProcessList(data.processList);
+  // updateProcessList(data.processList);
 });
 
 /* 
