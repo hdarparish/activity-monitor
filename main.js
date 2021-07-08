@@ -20,16 +20,18 @@ const { ipcRenderer } = require("electron/renderer");
   .then((data) => console.log(data))
   .catch((error) => console.error(error)); */
 
-ipcMain.on("get-cpu-status", async (e) => {
+ipcMain.on("get-status", async (e) => {
   // let memoryUsage = process.getSystemMemoryInfo();
   let memoryUsage = await si.mem();
   let cpuUsage = await si.currentLoad();
-  let cpuTemperature = await si.cpuTemperature();
+  let cpuDetails = await si.cpu();
+  let processList = await tasklist();
 
-  e.sender.send("cpu-status-success", {
+  e.sender.send("status-success", {
     cpuUsage,
     memoryUsage,
-    cpuTemperature,
+    cpuDetails,
+    processList,
   });
 });
 
