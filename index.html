@@ -11,61 +11,51 @@
       http-equiv="X-Content-Security-Policy"
       content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
       rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
     />
-
+    <link rel="stylesheet" href="styles.css" />
     <title>Activity Monitor</title>
   </head>
-  <body class="container">
-    <div class="d-flex flex-row justify-content-center align-items-center">
-      <div class="cpu flex-grow-1 text-center">
-        <div class="mt-1">
-          <h3>CPU Usage</h3>
-          <h4 id="cpu-header" class="text-center"></h4>
-        </div>
-        <div class="progress m-auto" style="width: 50%">
-          <div
-            class="progress-bar progress-bar-striped progress-bar-animated"
-            role="progressbar"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            id="cpu-progress"
-          ></div>
-        </div>
+  <body>
+    <main>
+      <article class="container">
+        <!-- CPU Section -->
+        <section class="cpu-section">
+          <h3>CPU</h3>
+          <div id="cpu-container"></div>
+          <div id="cpu-details">
+            <!--             <p>Model: Intel Core™ i9-10850K</p>
+            <h5>Cores: 10</h5>
+            <h5>Speed: 3.5Ghz</h5>
+            <h5>Temperature: 40</h5> -->
+          </div>
+        </section>
+        <!-- Memory Section -->
+        <section class="memory-section">
+          <h3>RAM</h3>
+          <div id="memory-container"></div>
+          <div class="memory-details"></div>
+        </section>
+      </article>
+      <!-- Process list section -->
+      <div>
+        <h3>Processes</h3>
+        <table class="">
+          <thead>
+            <tr>
+              <th scope="col">Process ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Memory</th>
+            </tr>
+          </thead>
+          <tbody id="tData"></tbody>
+        </table>
       </div>
-      <div class="memory flex-grow-1 text-center">
-        <div class="mt-1">
-          <h3>Memory Usage</h3>
-          <h4 id="memory-header" class="text-center"></h4>
-        </div>
-        <div class="progress m-auto" style="width: 50%">
-          <div
-            class="progress-bar progress-bar-striped progress-bar-animated"
-            role="progressbar"
-            aria-valuemin="0"
-            aria-valuemax="10"
-            id="memory-progress"
-          ></div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <h3>Processes</h3>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Process ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Memory</th>
-          </tr>
-        </thead>
-        <tbody id="tData"></tbody>
-      </table>
-    </div>
+    </main>
 
     <!-- You can also require other files to run in this process -->
     <script

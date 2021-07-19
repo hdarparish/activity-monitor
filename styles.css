@@ -1,0 +1,43 @@
+body {
+  /*   background: rgb(173, 173, 173); */
+  background: bisque;
+  font-family: "Montserrat", sans-serif;
+}
+h3 {
+  width: auto;
+  margin: auto;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+}
+
+section {
+  margin: 3rem;
+  padding: 2rem;
+  border-style: groove;
+}
+
+.cpu-section,
+.memory-section {
+  flex: 1;
+  text-align: center;
+}
+
+#cpu-container,
+#memory-container {
+  height: 70%;
+  width: 70%;
+  margin: auto;
+}
+
+.details {
+  margin-top: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
