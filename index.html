@@ -11,95 +11,40 @@
       http-equiv="X-Content-Security-Policy"
       content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net"
     />
-    <!--  <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    /> -->
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900"
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
       rel="stylesheet"
-      type="text/css"
     />
+    <link rel="stylesheet" href="styles.css" />
     <title>Activity Monitor</title>
   </head>
   <body>
     <main>
-      <article
-        class="d-flex flex-row justify-content-center align-items-center"
-      >
+      <article class="container">
         <!-- CPU Section -->
-        <section
-          class="cpu flex-grow-1 text-center m-2"
-          style="outline: #4caf50 solid 5px"
-        >
-          <div class="mt-1">
-            <h3>CPU</h3>
-
-            <h5 id="cpu-header" class="text-center"></h5>
-          </div>
-          <!-- <div id="cpu-container"></div> -->
-          <div class="container">
-            <svg width="200" height="200" class="chart-container">
-              <circle
-                cx="100"
-                cy="100"
-                r="90"
-                class="back"
-                fill="none"
-                class="back"
-              />
-              <circle cx="100" cy="100" r="90" class="front" fill="none" />
-              <g class="text">
-                <text
-                  x="100"
-                  y="100"
-                  alignment-baseline="central"
-                  text-anchor="middle"
-                  id="percentage"
-                >
-                  70%
-                </text>
-              </g>
-            </svg>
-          </div>
-          <div class="progress m-auto mb-2" style="width: 50%">
-            <div
-              class="progress-bar progress-bar-striped progress-bar-animated"
-              role="progressbar"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              id="cpu-progress"
-            ></div>
+        <section class="cpu-section">
+          <h3>CPU</h3>
+          <div id="cpu-container"></div>
+          <div id="cpu-details">
+            <!--             <p>Model: Intel Core™ i9-10850K</p>
+            <h5>Cores: 10</h5>
+            <h5>Speed: 3.5Ghz</h5>
+            <h5>Temperature: 40</h5> -->
           </div>
         </section>
         <!-- Memory Section -->
-        <section
-          class="memory flex-grow-1 text-center m-2"
-          style="outline: #4caf50 solid 5px"
-        >
-          <div class="mt-1">
-            <h3>Memory</h3>
-            <h5 id="memory-header" class="text-center"></h5>
-          </div>
+        <section class="memory-section">
+          <h3>RAM</h3>
           <div id="memory-container"></div>
-          <div class="progress m-auto mb-2" style="width: 50%">
-            <div
-              class="progress-bar progress-bar-striped progress-bar-animated"
-              role="progressbar"
-              aria-valuemin="0"
-              aria-valuemax="10"
-              id="memory-progress"
-            ></div>
-          </div>
+          <div class="memory-details"></div>
         </section>
       </article>
       <!-- Process list section -->
       <div>
         <h3>Processes</h3>
-        <table class="table table-striped">
+        <table class="">
           <thead>
             <tr>
               <th scope="col">Process ID</th>

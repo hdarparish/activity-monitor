@@ -1,11 +1,13 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, ipcMain } = require("electron");
 const ProgressBar = require("progressbar.js");
 
-const cpuProgress = document.getElementById("cpu-progress");
+/* const cpuProgress = document.getElementById("cpu-progress");
 const cpuHeader = document.getElementById("cpu-header");
 const memoryProgress = document.getElementById("memory-progress");
-const memoryHeader = document.getElementById("memory-header");
+const memoryHeader = document.getElementById("memory-header"); */
 let tbody = document.getElementById("tData");
+let cpuDetails = document.getElementById("cpu-details");
+let memoryDetails = document.getElementById("memory-details");
 
 /* const NOTIFICATION_TITLE = "Title";
 const NOTIFICATION_BODY =
@@ -16,7 +18,7 @@ new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY }).onclick =
   () => console.log(CLICK_MESSAGE);
  */
 
-/* const cpuBar = new ProgressBar.SemiCircle("#cpu-container", {
+const cpuBar = new ProgressBar.SemiCircle("#cpu-container", {
   strokeWidth: 6,
   color: "#FFEA82",
   trailColor: "#eee",
@@ -43,9 +45,61 @@ new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY }).onclick =
   },
 });
 cpuBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-cpuBar.text.style.fontSize = "2rem"; */
+cpuBar.text.style.fontSize = "2rem";
+
+const memoryBar = new ProgressBar.SemiCircle("#memory-container", {
+  strokeWidth: 6,
+  color: "#FFEA82",
+  trailColor: "#eee",
+  trailWidth: 1,
+  easing: "easeInOut",
+  svgStyle: null,
+  text: {
+    value: "",
+    alignToBottom: false,
+  },
+  from: { color: "#30a1c4" },
+  to: { color: "#e62910" },
+  // Set default step function for all animate calls
+  step: (state, memoryBar) => {
+    memoryBar.path.setAttribute("stroke", state.color);
+    let value = Math.round(memoryBar.value() * 100);
+    if (value === 0) {
+      memoryBar.setText("");
+    } else {
+      memoryBar.setText(`${value}%`);
+    }
+
+    memoryBar.text.style.color = state.color;
+  },
+});
+memoryBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+memoryBar.text.style.fontSize = "2rem";
 
 //bar.animate(1.0);
+
+//after the page loads communicate to main process
+window.addEventListener("load", (e) => {
+  ipcRenderer.send("on-load");
+});
+
+ipcRenderer.on("on-load-success", (e, data) => {
+  console.log(data);
+  let cpuModel = document.createElement("p");
+  let cpuCores = document.createElement("p");
+  let cpuSpeed = document.createElement("p");
+  cpuModel.innerText = `Model: ${data.cpuDetails.manufacturer} ${data.cpuDetails.brand}`;
+  cpuCores.innerText = `Cores: ${data.cpuDetails.physicalCores}`;
+  cpuSpeed.innerText = `Speed: ${data.cpuDetails.speed} GHz`;
+
+  //var text = document.createTextNode("Tutorix is the best e-learning platform");
+  //tag.appendChild(text);
+  cpuDetails.appendChild(cpuModel);
+  cpuDetails.appendChild(cpuCores);
+  cpuDetails.appendChild(cpuSpeed);
+
+  //memory details
+});
 
 //update the cpu status every 1 second
 setInterval((e) => {
@@ -71,7 +125,7 @@ const updateCpu = (cpuUsage) => {
   let cpu = Math.round(cpuUsage.currentLoad);
   //console.log(cpu);
   //change the progress bar colour
-  if (cpu > 85) {
+  /*   if (cpu > 85) {
     cpuProgress.classList.add("bg-danger");
   } else if (cpu > 70) {
     cpuProgress.classList.add("bg-warning");
@@ -80,16 +134,17 @@ const updateCpu = (cpuUsage) => {
   }
 
   cpuProgress.style.width = `${cpu}%`;
-  cpuHeader.innerText = `Load ${cpu}%`;
+  cpuHeader.innerText = `Load ${cpu}%`; */
   // Number from 0.0 to 1.0
-  //cpuBar.animate(cpu / 100);
+  cpuBar.animate(cpu / 100);
 };
 
 const updateMemory = (memoryUsage) => {
-  let memoryUsed = Math.round(memoryUsage.used / memoryUsage.total);
-
+  let memoryUsed = memoryUsage.used / memoryUsage.total;
+  /* 
   memoryProgress.style.width = `${memoryUsed * 100}%`;
-  memoryHeader.innerText = `Load ${memoryUsed * 100}%`;
+  memoryHeader.innerText = `Load ${memoryUsed * 100}%`; */
+  memoryBar.animate(memoryUsed);
 };
 
 ipcRenderer.on("status-success", (e, data) => {

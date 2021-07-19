@@ -3,34 +3,31 @@ const { app, BrowserWindow, getCPUUsage, ipcMain } = require("electron");
 const tasklist = require("tasklist");
 const si = require("systeminformation");
 const path = require("path");
-const { ipcRenderer } = require("electron/renderer");
 
-(async () => {
-  /*
-  [{
-      imageName: 'taskhostex.exe',
-      pid: 1820,
-      sessionName: 'Console',
-      sessionNumber: 1,
-      memUsage: 4415488
-  }, …]
-  */
-})();
-/* si.cpu()
-  .then((data) => console.log(data))
-  .catch((error) => console.error(error)); */
+ipcMain.on("on-load", async (e) => {
+  let cpuDetails = await si.cpu();
+  let graphics = await si.graphics();
+  let fileSystem = await si.diskLayout();
+  let memoryUsage = await si.mem();
+
+  e.sender.send("on-load-success", {
+    cpuDetails,
+    memoryUsage,
+    graphics,
+    fileSystem,
+  });
+});
 
 ipcMain.on("get-status", async (e) => {
   // let memoryUsage = process.getSystemMemoryInfo();
   let memoryUsage = await si.mem();
   let cpuUsage = await si.currentLoad();
-  let cpuDetails = await si.cpu();
+
   let processList = await tasklist();
 
   e.sender.send("status-success", {
     cpuUsage,
     memoryUsage,
-    cpuDetails,
     processList,
   });
 });
