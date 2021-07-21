@@ -9,10 +9,12 @@ ipcMain.on("on-load", async (e) => {
   let graphics = await si.graphics();
   let fileSystem = await si.diskLayout();
   let memoryUsage = await si.mem();
+  let memoryDetails = await si.memLayout();
 
   e.sender.send("on-load-success", {
     cpuDetails,
     memoryUsage,
+    memoryDetails,
     graphics,
     fileSystem,
   });
@@ -22,12 +24,15 @@ ipcMain.on("get-status", async (e) => {
   // let memoryUsage = process.getSystemMemoryInfo();
   let memoryUsage = await si.mem();
   let cpuUsage = await si.currentLoad();
-
+  let cpuTemperature = await si.cpuTemperature();
   let processList = await tasklist();
+  let graphics = await si.graphics();
 
   e.sender.send("status-success", {
     cpuUsage,
+    cpuTemperature,
     memoryUsage,
+    graphics,
     processList,
   });
 });
@@ -40,7 +45,7 @@ ipcMain.on("get-processes-list", async (e) => {
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
+    maxWidth: 1200,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),

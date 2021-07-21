@@ -1,6 +1,6 @@
 body {
   /*   background: rgb(173, 173, 173); */
-  background: bisque;
+  background: #dad1c5;
   font-family: "Montserrat", sans-serif;
 }
 h3 {
@@ -13,6 +13,7 @@ h3 {
   justify-content: space-around;
   align-items: center;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 section {
@@ -22,9 +23,19 @@ section {
 }
 
 .cpu-section,
-.memory-section {
+.memory-section,
+.gpu-section,
+.process-section {
   flex: 1;
   text-align: center;
+}
+.process-section {
+  flex: auto;
+
+  table {
+    width: 100%;
+    text-align: left;
+  }
 }
 
 #cpu-container,
