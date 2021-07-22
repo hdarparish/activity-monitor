@@ -23,6 +23,7 @@
     "nodemon": "^2.0.9"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "progressbar.js": "^1.1.0",
     "sass": "^1.35.2",
     "systeminformation": "^5.7.7",

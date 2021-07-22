@@ -3,6 +3,7 @@ const { app, BrowserWindow, getCPUUsage, ipcMain } = require("electron");
 const tasklist = require("tasklist");
 const si = require("systeminformation");
 const path = require("path");
+const _ = require("lodash");
 
 ipcMain.on("on-load", async (e) => {
   let cpuDetails = await si.cpu();
@@ -26,6 +27,8 @@ ipcMain.on("get-status", async (e) => {
   let cpuUsage = await si.currentLoad();
   let cpuTemperature = await si.cpuTemperature();
   let processList = await tasklist();
+  const sortedList = _.orderBy(processList, ["memUsage"], ["desc"]);
+  const topList = _.slice(sortedList, 0, 10);
   let graphics = await si.graphics();
 
   e.sender.send("status-success", {
@@ -33,7 +36,7 @@ ipcMain.on("get-status", async (e) => {
     cpuTemperature,
     memoryUsage,
     graphics,
-    processList,
+    topList,
   });
 });
 

@@ -1,6 +1,6 @@
-const { ipcRenderer, ipcMain } = require("electron");
+const { ipcRenderer } = require("electron");
 const ProgressBar = require("progressbar.js");
-const { graphics } = require("systeminformation");
+const _ = require("lodash");
 
 /* const cpuProgress = document.getElementById("cpu-progress");
 const cpuHeader = document.getElementById("cpu-header");
@@ -153,15 +153,17 @@ ipcRenderer.on("on-load-success", (e, data) => {
 //update the cpu status every 1 second
 setInterval((e) => {
   ipcRenderer.send("get-status");
-}, 1000);
+}, 5000);
 
 const updateProcessList = (processList) => {
+  //console.log(processList);
   tbody.innerHTML = "";
-  processList.sort(function (a, b) {
+  /*   processList.sort(function (a, b) {
     return a.memUsage - b.memUsage;
-  });
-  processList.forEach((element) => {
-    let row = tbody.insertRow(0);
+  }); */
+
+  processList.map((element, index) => {
+    let row = tbody.insertRow(index);
     row.insertCell(0).innerHTML = element.pid;
     row.insertCell(1).innerHTML = element.imageName;
     row.insertCell(2).innerHTML = `${(element.memUsage / 1000000).toFixed(
@@ -202,8 +204,8 @@ const updateGpu = (graphics) => {
 ipcRenderer.on("status-success", (e, data) => {
   updateCpu(data.cpuUsage);
   updateMemory(data.memoryUsage);
-  updateGpu(data.graphics);
-  updateProcessList(data.processList);
+  // updateGpu(data.graphics);
+  updateProcessList(data.topList);
 });
 
 /* 
