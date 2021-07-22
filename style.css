@@ -1,0 +1,77 @@
+body {
+  /*   background: rgb(173, 173, 173); */
+  background: #dad1c5;
+  font-family: "Montserrat", sans-serif;
+}
+
+h3 {
+  width: auto;
+  margin: auto;
+}
+
+.container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+section {
+  margin: 3rem;
+  padding: 2rem;
+  border-style: groove;
+}
+
+.cpu-section,
+.memory-section,
+.gpu-section,
+.process-section {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  text-align: center;
+}
+
+.process-section {
+  -webkit-box-flex: 1;
+      -ms-flex: auto;
+          flex: auto;
+}
+
+.process-section table {
+  width: 100%;
+  text-align: left;
+}
+
+#cpu-container,
+#memory-container {
+  height: 70%;
+  width: 70%;
+  margin: auto;
+}
+
+.details {
+  margin-top: inherit;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+/*# sourceMappingURL=style.css.map */

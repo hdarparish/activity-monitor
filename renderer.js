@@ -1,5 +1,6 @@
 const { ipcRenderer, ipcMain } = require("electron");
 const ProgressBar = require("progressbar.js");
+const { graphics } = require("systeminformation");
 
 /* const cpuProgress = document.getElementById("cpu-progress");
 const cpuHeader = document.getElementById("cpu-header");
@@ -8,7 +9,7 @@ const memoryHeader = document.getElementById("memory-header"); */
 let tbody = document.getElementById("tData");
 let cpuDetails = document.getElementById("cpu-details");
 let memoryDetails = document.getElementById("memory-details");
-
+let gpuDetails = document.getElementById("gpu-details");
 /* const NOTIFICATION_TITLE = "Title";
 const NOTIFICATION_BODY =
   "Notification from the Renderer process. Click to log to console.";
@@ -76,6 +77,35 @@ const memoryBar = new ProgressBar.SemiCircle("#memory-container", {
 memoryBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
 memoryBar.text.style.fontSize = "2rem";
 
+const gpuBar = new ProgressBar.SemiCircle("#gpu-container", {
+  strokeWidth: 6,
+  color: "#FFEA82",
+  trailColor: "#eee",
+  trailWidth: 1,
+  easing: "easeInOut",
+  svgStyle: null,
+  text: {
+    value: "",
+    alignToBottom: false,
+  },
+  from: { color: "#30a1c4" },
+  to: { color: "#e62910" },
+  // Set default step function for all animate calls
+  step: (state, gpuBar) => {
+    gpuBar.path.setAttribute("stroke", state.color);
+    let value = Math.round(gpuBar.value() * 100);
+    if (value === 0) {
+      gpuBar.setText("");
+    } else {
+      gpuBar.setText(`${value}%`);
+    }
+
+    gpuBar.text.style.color = state.color;
+  },
+});
+gpuBar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+gpuBar.text.style.fontSize = "2rem";
+
 //bar.animate(1.0);
 
 //after the page loads communicate to main process
@@ -99,6 +129,25 @@ ipcRenderer.on("on-load-success", (e, data) => {
   cpuDetails.appendChild(cpuSpeed);
 
   //memory details
+  let memoryTotal = document.createElement("p");
+  let memorySpeed = document.createElement("p");
+  memoryTotal.innerText = `Total: ${Math.round(
+    data.memoryUsage.total / 1000000000
+  )} GB`;
+  memorySpeed.innerText = `Clock Speed: ${data.memoryDetails[0].clockSpeed} MHz`;
+  memoryDetails.appendChild(memoryTotal);
+  memoryDetails.appendChild(memorySpeed);
+
+  //GPU section
+  let gpuModel = document.createElement("p");
+  let gpuMemory = document.createElement("p");
+
+  gpuModel.innerText = `Model: ${data.graphics.controllers[0].model}`;
+  gpuMemory.innerText = `Memory: ${Math.round(
+    data.graphics.controllers[0].memoryTotal / 1000
+  )} GB`;
+  gpuDetails.appendChild(gpuModel);
+  gpuDetails.appendChild(gpuMemory);
 });
 
 //update the cpu status every 1 second
@@ -141,16 +190,20 @@ const updateCpu = (cpuUsage) => {
 
 const updateMemory = (memoryUsage) => {
   let memoryUsed = memoryUsage.used / memoryUsage.total;
-  /* 
-  memoryProgress.style.width = `${memoryUsed * 100}%`;
-  memoryHeader.innerText = `Load ${memoryUsed * 100}%`; */
   memoryBar.animate(memoryUsed);
+};
+
+const updateGpu = (graphics) => {
+  let gpuUsage =
+    graphics.controllers[0].memoryUsed / graphics.controllers[0].memoryTotal;
+  gpuBar.animate(gpuUsage);
 };
 
 ipcRenderer.on("status-success", (e, data) => {
   updateCpu(data.cpuUsage);
   updateMemory(data.memoryUsage);
-  // updateProcessList(data.processList);
+  updateGpu(data.graphics);
+  updateProcessList(data.processList);
 });
 
 /* 
