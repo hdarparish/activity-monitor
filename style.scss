@@ -1,8 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 body {
   /*   background: rgb(173, 173, 173); */
   background: #50504f;
   font-family: "Montserrat", sans-serif;
   color: white;
+  overflow: hidden;
 }
 
 .container {
@@ -12,19 +18,21 @@ body {
   flex-direction: column;
   flex-wrap: wrap;
 }
-
-.cpu-section,
-.memory-section,
-.process-section {
+/* Sections */
+#cpu-section,
+#memory-section,
+#process-section {
   flex: 1;
   width: 100%;
   text-align: -webkit-center;
   h3 {
     text-align: -webkit-left;
     margin-top: 1rem;
+    margin-left: 1rem;
   }
 }
 
+/* CPU and RAM progress bar */
 #cpu-container,
 #memory-container {
   width: 150px;
@@ -33,19 +41,78 @@ body {
   }
 }
 
-.process-section {
+/* Process list section */
+#process-section {
   flex: auto;
-
+  overflow: hidden;
   table {
+    margin-left: 1rem;
     width: 100%;
     text-align: left;
   }
 }
 
-.details {
-  margin-top: inherit;
+/* Button selection section */
+.selection-section {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: row;
+  bottom: 0;
+  position: absolute;
+  button {
+    padding: 1rem;
+    width: 50vw;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: #eadfdf;
+    border: 1px solid #7e8e7f;
+    transition-duration: 0.4s;
+    &:hover {
+      cursor: pointer;
+      background-color: #75bed6;
+      color: rgb(55, 62, 68);
+    }
+  }
+}
+
+/* Settings section */
+#settings-section {
+  display: flex;
+  flex-direction: column;
+  h2 {
+    margin: 1rem;
+  }
+  div {
+    margin: 1.5rem;
+    align-self: center;
+  }
+  input {
+    width: 90%;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    font-size: 1.3rem;
+  }
+  button {
+    width: 30vw;
+    height: 5vh;
+    font-size: 1.1rem;
+    font-family: "Montserrat", sans-serif;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid #4caf50;
+    &:hover {
+      background-color: #4caf50;
+      color: white;
+    }
+  }
+}
+
+/* Hide display */
+.hide {
+  display: none;
 }

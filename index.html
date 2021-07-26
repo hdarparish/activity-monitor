@@ -24,28 +24,23 @@
     <main>
       <article class="container">
         <!-- CPU Section -->
-        <section class="cpu-section">
+        <section id="cpu-section">
           <h3>CPU</h3>
           <p id="cpu-model"></p>
           <div id="cpu-container"></div>
-
-            <!--             <p>Model: Intel Core™ i9-10850K</p>
-            <h5>Cores: 10</h5>
-            <h5>Speed: 3.5Ghz</h5>
-            <h5>Temperature: 40</h5> -->
           </div>
         </section>
         <!-- Memory Section -->
-        <section class="memory-section">
+        <section id="memory-section">
           <h3>RAM</h3>
           <p id="memory-type"></p>
           <div id="memory-container"></div>
         </section>
 
         <!-- Process list section -->
-        <section class="process-section">
+        <section id="process-section">
           <h3>Processes</h3>
-          <table class="">
+          <table>
             <thead>
               <tr>
                 <th scope="col">Name</th>
@@ -54,6 +49,35 @@
             </thead>
             <tbody id="tData"></tbody>
           </table>
+        </section>
+        <!-- Selections section -->
+        <section class="selection-section">
+          <div>
+            <button type="button" onclick="viewStatus()" >Status</button>
+          </div>
+          <div>
+            <button type="button" onclick="viewSettings()" >Settings</button>
+          </div>
+        </section>
+
+        <!-- Settings sections -->
+        <section id="settings-section">
+          <h2>Settings</h2>
+          <div>
+            <label for="usage-refresh">Refresh CPU and RAM usage every</label>
+            <input type="text" id="usage-refresh">
+          </div>
+          <div>
+            <label for="cpu-threshold">CPU Threshold</label>
+            <input type="text" id="cpu-threshold">
+          </div>
+          <div>
+            <label for="notification">Send notification every</label>
+            <input type="text" id="notification">
+          </div>
+          <div>
+            <button type="button">Save</button>
+          </div>
         </section>
       </article>
     </main>
