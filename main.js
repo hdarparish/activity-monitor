@@ -7,7 +7,6 @@ const _ = require("lodash");
 
 ipcMain.on("on-load", async (e) => {
   let cpuDetails = await si.cpu();
-  let graphics = await si.graphics();
   let fileSystem = await si.diskLayout();
   let memoryUsage = await si.mem();
   let memoryDetails = await si.memLayout();
@@ -16,7 +15,7 @@ ipcMain.on("on-load", async (e) => {
     cpuDetails,
     memoryUsage,
     memoryDetails,
-    graphics,
+
     fileSystem,
   });
 });
@@ -29,13 +28,11 @@ ipcMain.on("get-status", async (e) => {
   let processList = await tasklist();
   const sortedList = _.orderBy(processList, ["memUsage"], ["desc"]);
   const topList = _.slice(sortedList, 0, 10);
-  let graphics = await si.graphics();
 
   e.sender.send("status-success", {
     cpuUsage,
     cpuTemperature,
     memoryUsage,
-    graphics,
     topList,
   });
 });
@@ -48,8 +45,9 @@ ipcMain.on("get-processes-list", async (e) => {
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    maxWidth: 1200,
-    height: 600,
+    minWidth: 350,
+    maxWidth: 350,
+    height: 750,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
@@ -60,7 +58,7 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished
