@@ -1,22 +1,16 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, getCPUUsage, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const tasklist = require("tasklist");
 const si = require("systeminformation");
-const path = require("path");
 const _ = require("lodash");
 
 ipcMain.on("on-load", async (e) => {
   let cpuDetails = await si.cpu();
-  let fileSystem = await si.diskLayout();
   let memoryUsage = await si.mem();
-  let memoryDetails = await si.memLayout();
 
   e.sender.send("on-load-success", {
     cpuDetails,
     memoryUsage,
-    memoryDetails,
-
-    fileSystem,
   });
 });
 
@@ -24,14 +18,12 @@ ipcMain.on("get-status", async (e) => {
   // let memoryUsage = process.getSystemMemoryInfo();
   let memoryUsage = await si.mem();
   let cpuUsage = await si.currentLoad();
-  let cpuTemperature = await si.cpuTemperature();
   let processList = await tasklist();
   const sortedList = _.orderBy(processList, ["memUsage"], ["desc"]);
   const topList = _.slice(sortedList, 0, 10);
 
   e.sender.send("status-success", {
     cpuUsage,
-    cpuTemperature,
     memoryUsage,
     topList,
   });
@@ -46,10 +38,10 @@ function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     minWidth: 350,
-    maxWidth: 350,
-    height: 750,
+    // maxWidth: 350,
+    minHeight: 750,
+    maxHeight: 750,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       contextIsolation: false,
     },
