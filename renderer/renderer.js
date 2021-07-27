@@ -1,13 +1,15 @@
 const { ipcRenderer } = require("electron");
 const ProgressBar = require("progressbar.js");
-const _ = require("lodash");
-const { cpu } = require("systeminformation");
+const data = require("./data.js");
 
 let cpuSection = document.getElementById("cpu-section");
 let memorySection = document.getElementById("memory-section");
 let processSection = document.getElementById("process-section");
 let settingsSection = document.getElementById("settings-section");
 let tbody = document.getElementById("tData");
+let refreshRate = document.getElementById("usage-refresh");
+let cpuThreshold = document.getElementById("cpu-threshold");
+let notification = document.getElementById("notification");
 
 /* const NOTIFICATION_TITLE = "Title";
 const NOTIFICATION_BODY =
@@ -82,6 +84,11 @@ window.addEventListener("load", (e) => {
 
   //hide settings
   settingsSection.style.display = "none";
+
+  refreshRate.value = data.storage.refreshRate;
+  cpuThreshold.value = data.storage.threshold;
+  notification.value = data.storage.notification;
+  console.log(data.storage);
 });
 
 ipcRenderer.on("on-load-success", (e, data) => {
@@ -141,4 +148,13 @@ const viewStatus = (e) => {
   memorySection.classList.remove("hide");
   processSection.classList.remove("hide");
   settingsSection.style.display = "none";
+};
+
+const saveSetting = (event) => {
+  event.preventDefault();
+  data.storage.refreshRate = refreshRate.value;
+  data.storage.threshold = cpuThreshold.value;
+  data.storage.notification = notification.value;
+  data.save();
+  alert("Setting Saved");
 };

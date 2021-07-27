@@ -63,21 +63,23 @@
         <!-- Settings sections -->
         <section id="settings-section">
           <h2>Settings</h2>
-          <div>
-            <label for="usage-refresh">Refresh CPU and RAM usage every</label>
-            <input type="text" id="usage-refresh">
-          </div>
-          <div>
-            <label for="cpu-threshold">CPU Threshold</label>
-            <input type="text" id="cpu-threshold">
-          </div>
-          <div>
-            <label for="notification">Send notification every</label>
-            <input type="text" id="notification">
-          </div>
-          <div>
-            <button type="button">Save</button>
-          </div>
+          <form  onsubmit="saveSetting(event)" >
+            <div>
+              <label for="usage-refresh">Refresh CPU and RAM usage every</label>
+              <input type="number" id="usage-refresh" required />
+            </div>
+            <div>
+              <label for="cpu-threshold">CPU Threshold</label>
+              <input type="number" id="cpu-threshold" required />
+            </div>
+            <div>
+              <label for="notification">Send notification every</label>
+              <input type="number" id="notification" required />
+            </div>
+            <div>
+              <button type="submit" >Save</button>
+            </div>
+        </form>
         </section>
       </article>
     </main>
