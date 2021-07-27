@@ -85,10 +85,10 @@ window.addEventListener("load", (e) => {
   //hide settings
   settingsSection.style.display = "none";
 
+  //update the form with stored data
   refreshRate.value = data.storage.refreshRate;
   cpuThreshold.value = data.storage.threshold;
   notification.value = data.storage.notification;
-  console.log(data.storage);
 });
 
 ipcRenderer.on("on-load-success", (e, data) => {
@@ -106,7 +106,7 @@ ipcRenderer.on("on-load-success", (e, data) => {
 //update the cpu status every 1 second
 setInterval((e) => {
   ipcRenderer.send("get-status");
-}, 5000);
+}, data.storage.refreshRate);
 
 const updateProcessList = (processList) => {
   tbody.innerHTML = "";
@@ -157,4 +157,5 @@ const saveSetting = (event) => {
   data.storage.notification = notification.value;
   data.save();
   alert("Setting Saved");
+  location.reload();
 };
