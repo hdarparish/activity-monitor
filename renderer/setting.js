@@ -1,7 +1,7 @@
 //default settings
 const defaultSettings = {
   refreshRate: 3000,
-  threshold: 95,
+  threshold: 0.95,
   notification: 50000,
 };
 
