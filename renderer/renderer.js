@@ -104,20 +104,36 @@ const updateProcessList = (processList) => {
 //send CPU usage notification
 const sendNotification = () => {
   const NOTIFICATION_TITLE = "CPU";
-  const NOTIFICATION_BODY = `CPU usage at ${cpu * 100}%`;
-  //update the CPU and RAM status
-  setInterval((e) => {
-    new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY });
-  }, setting.storage.notification);
+  const NOTIFICATION_BODY = `CPU usage at ${Math.round(cpu * 100)}%`;
+  //send notification
+  new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY });
+};
+
+// Check how much time has passed since notification
+const checkFrequency = () => {
+  if (setting.storage.lastNotification == 0) {
+    // Store timestamp
+    setting.storage.lastNotification = +new Date();
+    return true;
+  }
+  const notifyTime = new Date(parseInt(setting.storage.lastNotification));
+
+  const now = new Date();
+  const diffTime = Math.abs(now - notifyTime);
+  const minutesPassed = Math.ceil(diffTime / (1000 * 60));
+  if (minutesPassed > setting.storage.notificationFrequency) {
+    setting.storage.lastNotification = +new Date();
+    return true;
+  } else {
+    return false;
+  }
 };
 
 const updateCpu = (cpuUsage) => {
   cpu = Math.round(cpuUsage.currentLoad) / 100;
   cpuBar.animate(cpu);
-  console.log(`cpu ${cpu}`);
-  console.log(`threshold ${setting.storage.threshold}`);
 
-  if (cpu >= setting.storage.threshold) {
+  if (cpu >= setting.storage.threshold && checkFrequency()) {
     sendNotification();
   }
 };
@@ -163,7 +179,7 @@ const saveSetting = (event) => {
   event.preventDefault();
   setting.storage.refreshRate = refreshRate.value;
   setting.storage.threshold = cpuThreshold.value / 100;
-  setting.storage.notification = cpuNotification.value;
+  setting.storage.notificationFrequency = cpuNotification.value;
   setting.save();
   alert("Setting Saved");
   location.reload();
