@@ -1,8 +1,9 @@
 //default settings
 const defaultSettings = {
   refreshRate: 3000,
-  threshold: 95,
-  notification: 50000,
+  threshold: 0.95,
+  notificationFrequency: 50000,
+  lastNotification: 0,
 };
 
 // Track items in storage

@@ -49,6 +49,12 @@ body {
     margin-left: 1rem;
     width: 100%;
     text-align: left;
+    border-collapse: collapse;
+  }
+  table,
+  td,
+  th {
+    padding: 0.2rem;
   }
 }
 

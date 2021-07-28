@@ -38,7 +38,7 @@ function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     minWidth: 350,
-    // maxWidth: 350,
+    maxWidth: 350,
     minHeight: 750,
     maxHeight: 750,
     webPreferences: {
@@ -50,7 +50,7 @@ function createWindow() {
   mainWindow.loadFile("./renderer/index.html");
 
   // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 }
 
 // This method will be called when Electron has finished

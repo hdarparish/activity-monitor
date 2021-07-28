@@ -1,6 +1,6 @@
 const { ipcRenderer } = require("electron");
 const ProgressBar = require("progressbar.js");
-const data = require("./data.js");
+const setting = require("./setting.js");
 
 let cpuSection = document.getElementById("cpu-section");
 let memorySection = document.getElementById("memory-section");
@@ -9,16 +9,9 @@ let settingsSection = document.getElementById("settings-section");
 let tbody = document.getElementById("tData");
 let refreshRate = document.getElementById("usage-refresh");
 let cpuThreshold = document.getElementById("cpu-threshold");
-let notification = document.getElementById("notification");
+let cpuNotification = document.getElementById("notification");
 
-/* const NOTIFICATION_TITLE = "Title";
-const NOTIFICATION_BODY =
-  "Notification from the Renderer process. Click to log to console.";
-const CLICK_MESSAGE = "Notification clicked";
-
-new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY }).onclick =
-  () => console.log(CLICK_MESSAGE);
- */
+let cpu;
 
 const cpuBar = new ProgressBar.SemiCircle("#cpu-container", {
   strokeWidth: 6,
@@ -86,27 +79,15 @@ window.addEventListener("load", (e) => {
   settingsSection.style.display = "none";
 
   //update the form with stored data
-  refreshRate.value = data.storage.refreshRate;
-  cpuThreshold.value = data.storage.threshold;
-  notification.value = data.storage.notification;
+  refreshRate.value = setting.storage.refreshRate;
+  cpuThreshold.value = setting.storage.threshold * 100;
+  cpuNotification.value = setting.storage.notification;
 });
 
-ipcRenderer.on("on-load-success", (e, data) => {
-  console.log(data);
-  let cpuModel = document.getElementById("cpu-model");
-  cpuModel.innerText = `${data.cpuDetails.manufacturer} ${data.cpuDetails.brand} @ ${data.cpuDetails.speed} GHz`;
-
-  //memory details
-  let memoryType = document.getElementById("memory-type");
-  memoryType.innerText = `${Math.round(
-    data.memoryUsage.total / 1000000000
-  )} GB`;
-});
-
-//update the cpu status every 1 second
+//update the CPU and RAM status
 setInterval((e) => {
   ipcRenderer.send("get-status");
-}, data.storage.refreshRate);
+}, setting.storage.refreshRate);
 
 const updateProcessList = (processList) => {
   tbody.innerHTML = "";
@@ -120,15 +101,59 @@ const updateProcessList = (processList) => {
   });
 };
 
+//send CPU usage notification
+const sendNotification = () => {
+  const NOTIFICATION_TITLE = "CPU";
+  const NOTIFICATION_BODY = `CPU usage at ${Math.round(cpu * 100)}%`;
+  //send notification
+  new Notification(NOTIFICATION_TITLE, { body: NOTIFICATION_BODY });
+};
+
+// Check how much time has passed since notification
+const checkFrequency = () => {
+  if (setting.storage.lastNotification == 0) {
+    // Store timestamp
+    setting.storage.lastNotification = +new Date();
+    return true;
+  }
+  const notifyTime = new Date(parseInt(setting.storage.lastNotification));
+
+  const now = new Date();
+  const diffTime = Math.abs(now - notifyTime);
+  const minutesPassed = Math.ceil(diffTime / (1000 * 60));
+  if (minutesPassed > setting.storage.notificationFrequency) {
+    setting.storage.lastNotification = +new Date();
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const updateCpu = (cpuUsage) => {
-  let cpu = Math.round(cpuUsage.currentLoad);
-  cpuBar.animate(cpu / 100);
+  cpu = Math.round(cpuUsage.currentLoad) / 100;
+  cpuBar.animate(cpu);
+
+  if (cpu >= setting.storage.threshold && checkFrequency()) {
+    sendNotification();
+  }
 };
 
 const updateMemory = (memoryUsage) => {
   let memoryUsed = memoryUsage.used / memoryUsage.total;
   memoryBar.animate(memoryUsed);
 };
+
+//onload show CPU model and total RAM
+ipcRenderer.on("on-load-success", (e, data) => {
+  let cpuModel = document.getElementById("cpu-model");
+  cpuModel.innerText = `${data.cpuDetails.manufacturer} ${data.cpuDetails.brand} @ ${data.cpuDetails.speed} GHz`;
+
+  //memory details
+  let memoryType = document.getElementById("memory-type");
+  memoryType.innerText = `${Math.round(
+    data.memoryUsage.total / 1000000000
+  )} GB`;
+});
 
 ipcRenderer.on("status-success", (e, data) => {
   updateCpu(data.cpuUsage);
@@ -152,10 +177,10 @@ const viewStatus = (e) => {
 
 const saveSetting = (event) => {
   event.preventDefault();
-  data.storage.refreshRate = refreshRate.value;
-  data.storage.threshold = cpuThreshold.value;
-  data.storage.notification = notification.value;
-  data.save();
+  setting.storage.refreshRate = refreshRate.value;
+  setting.storage.threshold = cpuThreshold.value / 100;
+  setting.storage.notificationFrequency = cpuNotification.value;
+  setting.save();
   alert("Setting Saved");
   location.reload();
 };
