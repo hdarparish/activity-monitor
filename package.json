@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/hdarparish/activity-monitor#readme",
   "devDependencies": {
-    "electron": "^13.1.6",
+    "electron": "^24.1.2",
     "nodemon": "^2.0.9"
   },
   "dependencies": {
